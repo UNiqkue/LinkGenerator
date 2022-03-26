@@ -6,7 +6,3 @@ create table links
     visits_count  bigint,
     create_at     timestamp
 );
-
-alter table links
-    owner to postgres;
-

@@ -1,0 +1,745 @@
+{
+	"info": {
+		"_postman_id": "cd4ad535-df08-45fc-b381-10725f62587b",
+		"name": "Link generator",
+		"description": "Взаимодействие с HTTP-сервисом, который генерирует короткие ссылки",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "stats",
+			"item": [
+				{
+					"name": "Get statistic about links",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/stats?page=1&count=5",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"stats"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "count",
+									"value": "5"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "ok",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/stats?page=1&count=2",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"stats"
+									],
+									"query": [
+										{
+											"key": "page",
+											"value": "1"
+										},
+										{
+											"key": "count",
+											"value": "2"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "[\n  {\n    \"link\": \"dolor\",\n    \"original\": \"laboris non Excepteur proident nisi\",\n    \"rank\": -23329252,\n    \"count\": 94805411\n  },\n  {\n    \"link\": \"exercitation aliqua ad Excepteur\",\n    \"original\": \"est minim exercitation eu cupidatat\",\n    \"rank\": -10412443,\n    \"count\": -88474687\n  }\n]"
+						},
+						{
+							"name": "bad request",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/stats?page=1&count=2",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"stats"
+									],
+									"query": [
+										{
+											"key": "page",
+											"value": "1"
+										},
+										{
+											"key": "count",
+											"value": "2"
+										}
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"message\": \"ut\"\n}"
+						},
+						{
+							"name": "not found",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/stats?page=1&count=2",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"stats"
+									],
+									"query": [
+										{
+											"key": "page",
+											"value": "1"
+										},
+										{
+											"key": "count",
+											"value": "2"
+										}
+									]
+								}
+							},
+							"status": "Not Found",
+							"code": 404,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"message\": \"ut\"\n}"
+						},
+						{
+							"name": "internal server error",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/stats?page=1&count=2",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"stats"
+									],
+									"query": [
+										{
+											"key": "page",
+											"value": "1"
+										},
+										{
+											"key": "count",
+											"value": "2"
+										}
+									]
+								}
+							},
+							"status": "Internal Server Error",
+							"code": 500,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"message\": \"ut\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Get statistic about this link",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/stats/:link",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"stats",
+								":link"
+							],
+							"variable": [
+								{
+									"key": "link",
+									"value": "aonfGjtKG",
+									"description": "(Required) short generated link"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "ok",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/stats/:link",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"stats",
+										":link"
+									],
+									"variable": [
+										{
+											"key": "link",
+											"value": "eiusmod id proident incididunt exercitation",
+											"description": "(Required) short generated link"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"link\": \"adipisicing eiusmod aute enim\",\n  \"original\": \"nostrud enim\",\n  \"rank\": 48761307,\n  \"count\": 61304592\n}"
+						},
+						{
+							"name": "bad request",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/stats/:link",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"stats",
+										":link"
+									],
+									"variable": [
+										{
+											"key": "link",
+											"value": "eiusmod id proident incididunt exercitation",
+											"description": "(Required) short generated link"
+										}
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"message\": \"ut\"\n}"
+						},
+						{
+							"name": "not found",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/stats/:link",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"stats",
+										":link"
+									],
+									"variable": [
+										{
+											"key": "link",
+											"value": "eiusmod id proident incididunt exercitation",
+											"description": "(Required) short generated link"
+										}
+									]
+								}
+							},
+							"status": "Not Found",
+							"code": 404,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"message\": \"ut\"\n}"
+						},
+						{
+							"name": "internal server error",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/stats/:link",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"stats",
+										":link"
+									],
+									"variable": [
+										{
+											"key": "link",
+											"value": "eiusmod id proident incididunt exercitation",
+											"description": "(Required) short generated link"
+										}
+									]
+								}
+							},
+							"status": "Internal Server Error",
+							"code": 500,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"message\": \"ut\"\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Generate new short link by given link",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"original\": \"https://github.com/qcha/JBook/blob/master/other/garbage_collector.md\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/generate",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"generate"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "ok",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"original\": \"Duis\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/generate",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"generate"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						}
+					],
+					"cookie": [],
+					"body": "{\n  \"link\": \"paria\"\n}"
+				},
+				{
+					"name": "bad request",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"original\": \"Duis\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/generate",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"generate"
+							]
+						}
+					},
+					"status": "Bad Request",
+					"code": 400,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						}
+					],
+					"cookie": [],
+					"body": "{\n  \"message\": \"ut\"\n}"
+				},
+				{
+					"name": "not found",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"original\": \"Duis\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/generate",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"generate"
+							]
+						}
+					},
+					"status": "Not Found",
+					"code": 404,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						}
+					],
+					"cookie": [],
+					"body": "{\n  \"message\": \"ut\"\n}"
+				},
+				{
+					"name": "internal server error",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"original\": \"Duis\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/generate",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"generate"
+							]
+						}
+					},
+					"status": "Internal Server Error",
+					"code": 500,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						}
+					],
+					"cookie": [],
+					"body": "{\n  \"message\": \"ut\"\n}"
+				}
+			]
+		},
+		{
+			"name": "Redirection by new short link",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "{{baseUrl}}/l/:link",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"l",
+						":link"
+					],
+					"variable": [
+						{
+							"key": "link",
+							"value": "LNntW6HKp",
+							"description": "(Required) short generated link"
+						}
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "redirect",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/l/:link",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"l",
+								":link"
+							],
+							"variable": [
+								{
+									"key": "link",
+									"value": "eiusmod id proident incididunt exercitation",
+									"description": "(Required) short generated link"
+								}
+							]
+						}
+					},
+					"status": "Found",
+					"code": 302,
+					"_postman_previewlanguage": "text",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "text/plain"
+						}
+					],
+					"cookie": [],
+					"body": ""
+				},
+				{
+					"name": "bad request",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/l/:link",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"l",
+								":link"
+							],
+							"variable": [
+								{
+									"key": "link",
+									"value": "eiusmod id proident incididunt exercitation",
+									"description": "(Required) short generated link"
+								}
+							]
+						}
+					},
+					"status": "Bad Request",
+					"code": 400,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						}
+					],
+					"cookie": [],
+					"body": "{\n  \"message\": \"ut\"\n}"
+				},
+				{
+					"name": "not found",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/l/:link",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"l",
+								":link"
+							],
+							"variable": [
+								{
+									"key": "link",
+									"value": "eiusmod id proident incididunt exercitation",
+									"description": "(Required) short generated link"
+								}
+							]
+						}
+					},
+					"status": "Not Found",
+					"code": 404,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						}
+					],
+					"cookie": [],
+					"body": "{\n  \"message\": \"ut\"\n}"
+				},
+				{
+					"name": "internal server error",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/l/:link",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"l",
+								":link"
+							],
+							"variable": [
+								{
+									"key": "link",
+									"value": "eiusmod id proident incididunt exercitation",
+									"description": "(Required) short generated link"
+								}
+							]
+						}
+					},
+					"status": "Internal Server Error",
+					"code": 500,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						}
+					],
+					"cookie": [],
+					"body": "{\n  \"message\": \"ut\"\n}"
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "/",
+			"type": "string"
+		}
+	]
+}

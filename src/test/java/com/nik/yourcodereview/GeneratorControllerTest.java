@@ -22,15 +22,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 public class GeneratorControllerTest extends AbstractTest {
 
-    @Autowired
-    private MockMvc mvc;
-
-    @Autowired
-    private ObjectMapper objectMapper;
-
-    @Autowired
-    private LinkRepository linkRepository;
-
     @AfterEach
     public void clearDB() {
         linkRepository.deleteAll();

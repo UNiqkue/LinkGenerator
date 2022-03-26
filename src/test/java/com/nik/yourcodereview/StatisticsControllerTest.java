@@ -120,6 +120,8 @@ public class StatisticsControllerTest extends AbstractTest {
         List<Link> links = objectMapper.readValue(response.getContentAsString(), objectMapper.getTypeFactory().constructCollectionType(List.class, Link.class));
 
         Assertions.assertAll(
+                () -> Assertions.assertEquals(4, links.size()),
+
                 () -> Assertions.assertEquals("https://github.com/qcha/JBook/blob/master/other/garbage_collector.md",
                         links.get(0).getOriginal()),
                 () -> Assertions.assertEquals("LNntW6HKp", links.get(0).getLink()),
