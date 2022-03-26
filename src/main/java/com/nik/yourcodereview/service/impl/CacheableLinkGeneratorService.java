@@ -45,10 +45,7 @@ public class CacheableLinkGeneratorService implements LinkGeneratorService {
     @Cacheable(value = "links", key = "#shortLink", cacheManager = "links")
     public String getOriginalLinkByShort(String shortLink) {
         return linkService.getLinkByShort(shortLink)
-                .map(linkBO -> {
-                    linkService.updateLinkVisitsCount(shortLink);
-                    return linkBO.getOriginalLink();
-                })
+                .map(LinkBO::getOriginalLink)
                 .orElseThrow(() -> new LinkException("This short link not found", HttpStatus.NOT_FOUND));
     }
 }

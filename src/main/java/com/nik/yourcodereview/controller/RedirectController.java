@@ -1,6 +1,8 @@
 package com.nik.yourcodereview.controller;
 
+import com.nik.yourcodereview.exception.LinkException;
 import com.nik.yourcodereview.service.LinkGeneratorService;
+import com.nik.yourcodereview.service.LinkService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
@@ -12,7 +14,6 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 
 @Slf4j
 @Validated
@@ -20,19 +21,22 @@ import javax.validation.constraints.NotNull;
 @RequiredArgsConstructor
 public class RedirectController {
     private final LinkGeneratorService linkGeneratorService;
+    private final LinkService linkService;
 
     /**
      * GET /l/{link} : Redirection by new short link
      *
-     * @param link short generated link (required)
+     * @param shortLink - short generated link (required)
      * @return redirection (status code 302)
+     * @throws LinkException - если запись не найдена
      */
     @GetMapping(
             value = "/l/{link}",
             produces = {MediaType.APPLICATION_JSON_VALUE}
     )
-    public RedirectView getRedirect(@Valid @NotBlank @PathVariable("link") String link) {
-        String originalLink = linkGeneratorService.getOriginalLinkByShort(link);
+    public RedirectView getRedirect(@Valid @NotBlank @PathVariable("link") String shortLink) {
+        String originalLink = linkGeneratorService.getOriginalLinkByShort(shortLink);
+        linkService.updateLinkVisitsCount(shortLink);
         log.info("Response: Redirection to {}", originalLink);
         return new RedirectView(originalLink);
     }

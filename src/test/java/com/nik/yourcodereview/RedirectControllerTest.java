@@ -16,7 +16,6 @@ import java.time.LocalDateTime;
 import static com.nik.yourcodereview.builder.TestUtils.buildHttpHeaders;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@ActiveProfiles("test")
 public class RedirectControllerTest extends AbstractTest {
 
     @Autowired
@@ -63,6 +62,23 @@ public class RedirectControllerTest extends AbstractTest {
                 () -> Assertions.assertEquals(linkEntity.getShortLink(), linkEntityActual.getShortLink()),
                 () -> Assertions.assertEquals(linkEntity.getVisitsCount() + 1, linkEntityActual.getVisitsCount()),
                 () -> Assertions.assertNotNull(linkEntityActual.getCreateAt())
+        );
+
+        //повторный запрос - ожидается, что закешируется, но и обновиться счётчик должен
+        MockHttpServletResponse responseRepeated = mvc.perform(MockMvcRequestBuilders.get("/l/" + shortLink)
+                        .headers(buildHttpHeaders()))
+                .andExpect(status().is(302))
+                .andReturn().getResponse();
+
+        LinkEntity linkEntityActualRepeated = linkRepository.findById(shortLink).orElseThrow();
+        Assertions.assertAll(
+                "Проверка, что содержит нужный урл для редиректа и данные в Entity поменялись только для счётчика",
+                () -> Assertions.assertEquals(linkEntity.getOriginalLink(), responseRepeated.getRedirectedUrl()),
+
+                () -> Assertions.assertEquals(linkEntity.getOriginalLink(), linkEntityActualRepeated.getOriginalLink()),
+                () -> Assertions.assertEquals(linkEntity.getShortLink(), linkEntityActualRepeated.getShortLink()),
+                () -> Assertions.assertEquals(linkEntity.getVisitsCount() + 2, linkEntityActualRepeated.getVisitsCount()),
+                () -> Assertions.assertEquals(linkEntityActual.getCreateAt(), linkEntityActualRepeated.getCreateAt())
         );
     }
 

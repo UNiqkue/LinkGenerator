@@ -19,7 +19,7 @@ public class LoggingServiceImpl implements LoggingService {
         StringBuilder stringBuilder = new StringBuilder();
         Map<String, String> parameters = buildParametersMap(httpServletRequest);
 
-        stringBuilder.append("REQUEST ").append(httpServletRequest.getMethod()).append(httpServletRequest.getRequestURI()).append("\n");
+        stringBuilder.append("REQUEST ").append(httpServletRequest.getMethod()).append(" ").append(httpServletRequest.getRequestURI()).append("\n");
         stringBuilder.append("headers=[").append(buildHeadersMap(httpServletRequest)).append("]");
 
         if (!parameters.isEmpty()) {

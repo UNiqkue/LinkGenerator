@@ -35,8 +35,8 @@ public class GeneratorController {
     /**
      * POST /generate : Generate new short link by given link
      *
-     * @param linkPost
-     * @return ok (status code 200)
+     * @param linkPost - содержит оригининальную ссылку
+     * @return {@link ShortLink} ok (status code 200)
      */
     @RequestMapping(
             method = RequestMethod.POST,
