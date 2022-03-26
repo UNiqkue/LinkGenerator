@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.nik.yourcodereview</groupId>
+    <artifactId>link-generator-codegen</artifactId>
+    <version>1.0.0</version>
+
+    <properties>
+        <name>link-generator</name>
+    </properties>
+
+    <build>
+        <finalName>${name}</finalName>
+        <plugins>
+            <plugin>
+                <groupId>org.openapitools</groupId>
+                <artifactId>openapi-generator-maven-plugin</artifactId>
+                <version>5.3.1</version>
+                <executions>
+                    <execution>
+                        <id>link-generator</id>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration>
+                            <inputSpec>
+                                ../doc/openapi.yaml
+                            </inputSpec>
+                            <output>codegen</output>
+                            <generatorName>spring</generatorName>
+                            <configOptions>
+                                <groupId>com.nik.yourcodereview.api</groupId>
+                                <artifactId>${name}</artifactId>
+                                <modelPackage>com.nik.yourcodereview.${name}.models</modelPackage>
+                                <apiPackage>com.nik.yourcodereview.${name}.controllers</apiPackage>
+                                <dateLibrary>java11</dateLibrary>
+                                <java11>true</java11>
+                                <useBeanValidation>true</useBeanValidation>
+                            </configOptions>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>

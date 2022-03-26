@@ -1,0 +1,43 @@
+server:
+  port: 9000
+  servlet:
+    encoding:
+      force: true
+      enabled: true
+      charset: UTF-8
+
+spring:
+  application:
+    name: link-generator
+  datasource:
+    driverClassName: org.postgresql.Driver
+    url: "jdbc:postgresql://localhost:5432/link_storage"
+    username: "postgres"
+    password: "12345"
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQL10Dialect
+    properties:
+      hibernate:
+        format_sql: true
+        show_sql: true
+
+link:
+  generator:
+    hash:
+      keys: 123, 234, 345
+
+logging:
+  level:
+    com.nik: DEBUG
+    org:
+      springframework.web: ERROR
+      springframework.web.filter.CommonsRequestLoggingFilter: DEBUG
+      hibernate:
+        SQL: DEBUG
+        type.descriptor.sql.BasicBinder: TRACE
+  pattern:
+    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+  file:
+    name: log/link-generator.log
+    max-history: 3
+    max-size: 5MB

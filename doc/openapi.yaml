@@ -1,0 +1,223 @@
+openapi: "3.0.3"
+info:
+  version: "1.0.0"
+  title: "Генератор ссылок"
+  description: "Взаимодействие с HTTP-сервисом, который генерирует короткие ссылки"
+tags:
+  - name: "gen"
+    description: "For generating links"
+  - name: "stat"
+    description: "For obtaining statistics about links"
+  - name: "redirect"
+    description: "For redirection by short link"
+paths:
+  /generate:
+    post:
+      tags:
+      - "gen"
+      operationId: "postGenerate"
+      summary: "Generate new short link by given link"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LinkPost'
+      responses:
+        200:
+          description: ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ShortLink'
+        400:
+          description: bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        404:
+          description: not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        500:
+          description: internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /l/{link}:
+    get:
+      tags:
+        - "redirect"
+      operationId: "getRedirect"
+      summary: "Redirection by new short link"
+      parameters:
+        - name: "link"
+          in: path
+          description: "short generated link"
+          required: true
+          schema:
+            type: string
+      responses:
+        302:
+          description: redirect
+        400:
+          description: bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        404:
+          description: not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        500:
+          description: internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /stats/{link}:
+    get:
+      tags:
+        - "stat"
+      operationId: "getStatsByUrl"
+      summary: "Get statistic about this link"
+      parameters:
+        - name: "link"
+          in: path
+          description: "short generated link"
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Link'
+        400:
+          description: bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        404:
+          description: not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        500:
+          description: internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /stats:
+    get:
+      tags:
+        - "stat"
+      operationId: "getStats"
+      summary: "Get statistic about links"
+      parameters:
+        - name: page
+          in: "query"
+          description: "номер страницы"
+          schema:
+            type: integer
+            default: 1
+            minimum: 1
+        - name: "count"
+          in: "query"
+          description: "число записей, отображаемых на странице, максимальное возможное значение 100 (включительно)"
+          schema:
+            type: integer
+            default: 2
+            minimum: 1
+            maximum: 100
+      responses:
+        200:
+          description: ok
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Link'
+        400:
+          description: bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        404:
+          description: not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        500:
+          description: internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+components:
+  schemas:
+    LinkPost:
+      type: object
+      properties:
+        original:
+          type: string
+          description: "given original link"
+          minLength: 1
+          maxLength: 2048
+      required:
+        - original
+    ShortLink:
+      type: object
+      properties:
+        link:
+          type: string
+          description: "given original link"
+          minLength: 1
+          maxLength: 10
+      required:
+        - link
+    Link:
+      type: object
+      properties:
+        link:
+          type: string
+          description: "short generated link"
+        original:
+          type: string
+          description: "given original link"
+        rank:
+          type: integer
+          format: int64
+          description: "место ссылки в топе запросов"
+        count:
+          type: integer
+          format: int64
+          description: "число запросов по короткой ссылке"
+      required:
+        - link
+        - original
+        - rank
+        - count
+    Error:
+      type: object
+      properties:
+        message:
+          type: string
+          description: "message of error"
+      required:
+        - message
