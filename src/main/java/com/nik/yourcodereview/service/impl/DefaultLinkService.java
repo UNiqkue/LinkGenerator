@@ -32,7 +32,7 @@ public class DefaultLinkService implements LinkService, StatisticService {
     @Override
     public LinkBO addLink(LinkBO link) {
         return linkMapper.mapToLinkBO(linkRepository
-                .save(linkMapper.mapToEntity(link)));
+                .saveAndFlush(linkMapper.mapToEntity(link)));
     }
 
     @Override
