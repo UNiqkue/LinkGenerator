@@ -160,11 +160,13 @@ public class StatisticsControllerTest extends AbstractTest {
                 .andReturn().getResponse();
 
         Error error = objectMapper.readValue(response.getContentAsString(), Error.class);
+        //expected message "getStats.count: must be less than or equal to 100, getStats.page: must be greater than or equal to 1"
+        //but my locale - ru, and github - eng
         Assertions.assertAll(
-                () -> Assertions.assertTrue(
-                        error.getMessage().contains("getStats.page: должно быть не меньше 1")),
-                () -> Assertions.assertTrue(
-                        error.getMessage().contains("getStats.count: должно быть не больше 100"))
+                () -> Assertions.assertTrue(error.getMessage().contains("getStats.page:")),
+                () -> Assertions.assertTrue(error.getMessage().contains("1")),
+                () -> Assertions.assertTrue(error.getMessage().contains("getStats.count:")),
+                () -> Assertions.assertTrue(error.getMessage().contains("100"))
         );
     }
 
