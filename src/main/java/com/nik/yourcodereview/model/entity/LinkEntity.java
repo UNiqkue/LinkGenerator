@@ -22,7 +22,7 @@ import java.time.LocalDateTime;
 public class LinkEntity {
 
     @Id
-    @Column(name = "short_link", unique = true, length = 15)
+    @Column(name = "short_link", unique = true, length = 10)
     private String shortLink;
 
     @Column(name = "original_link", length = 2048)
