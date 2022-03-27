@@ -5,36 +5,41 @@ import com.nik.yourcodereview.model.dto.Link;
 import com.nik.yourcodereview.model.dto.LinkPost;
 import com.nik.yourcodereview.model.dto.ShortLink;
 import com.nik.yourcodereview.model.entity.LinkEntity;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.Mappings;
+import com.nik.yourcodereview.utils.UrlUtils;
+import org.mapstruct.*;
 
 import java.util.List;
 
 @Mapper(config = MapStructConfig.class)
-public interface LinkMapper {
+public abstract class LinkMapper {
 
     @Mapping(source = "original", target = "originalLink")
-    LinkBO mapToLinkBO(LinkPost linkPost);
+    public abstract LinkBO mapToLinkBO(LinkPost linkPost);
 
-    LinkBO mapToLinkBO(LinkEntity linkEntity);
+    public abstract LinkBO mapToLinkBO(LinkEntity linkEntity);
 
     @Mapping(source = "shortLink", target = "link")
-    ShortLink mapToShortLinkDTO(LinkBO linkBO);
+    public abstract ShortLink mapToShortLinkDTO(LinkBO linkBO);
+
+    @AfterMapping
+    protected void addRedirectPrefixToShortLink(LinkBO linkBO, @MappingTarget ShortLink shortLink) {
+        shortLink.setLink(UrlUtils.addRedirectPrefix(linkBO.getShortLink()));
+    }
 
     @Mappings({
             @Mapping(source = "shortLink", target = "link"),
             @Mapping(source = "originalLink", target = "original"),
             @Mapping(source = "visitsCount", target = "count")
     })
-    Link mapToLinkDTO(LinkBO linkBO);
+    public abstract Link mapToLinkDTO(LinkBO linkBO);
 
-    @Mappings({
-            @Mapping(source = "shortLink", target = "link"),
-            @Mapping(source = "originalLink", target = "original"),
-            @Mapping(source = "visitsCount", target = "count")
-    })
-    List<Link> mapToLinkDTO(List<LinkBO> linkBOList);
+    @AfterMapping
+    protected void addRedirectPrefixToShortLink(LinkBO linkBO, @MappingTarget Link link) {
+        link.setLink(UrlUtils.addRedirectPrefix(linkBO.getShortLink()));
+    }
 
-    LinkEntity mapToEntity(LinkBO linkBO);
+    @InheritConfiguration
+    public abstract List<Link> mapToLinkDTO(List<LinkBO> linkBOList);
+
+    public abstract LinkEntity mapToEntity(LinkBO linkBO);
 }

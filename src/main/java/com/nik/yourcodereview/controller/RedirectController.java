@@ -15,12 +15,15 @@ import org.springframework.web.servlet.view.RedirectView;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 
+import static com.nik.yourcodereview.utils.UrlUtils.L_PATH;
+
 @Slf4j
 @Validated
 @RestController
 @RequiredArgsConstructor
 public class RedirectController {
     private final LinkGeneratorService linkGeneratorService;
+
     private final LinkService linkService;
 
     /**
@@ -31,7 +34,7 @@ public class RedirectController {
      * @throws LinkException - если запись не найдена
      */
     @GetMapping(
-            value = "/l/{link}",
+            value = L_PATH + "{link}",
             produces = {MediaType.APPLICATION_JSON_VALUE}
     )
     public RedirectView getRedirect(@Valid @NotBlank @PathVariable("link") String shortLink) {

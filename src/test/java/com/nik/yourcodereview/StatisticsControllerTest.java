@@ -17,6 +17,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import static com.nik.yourcodereview.builder.TestUtils.buildHttpHeaders;
+import static com.nik.yourcodereview.utils.UrlUtils.L_PATH;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 public class StatisticsControllerTest extends AbstractTest {
@@ -60,7 +61,7 @@ public class StatisticsControllerTest extends AbstractTest {
 
         Assertions.assertAll(
                 () -> Assertions.assertEquals(linkEntity.getOriginalLink(), link.getOriginal()),
-                () -> Assertions.assertEquals(linkEntity.getShortLink(), link.getLink()),
+                () -> Assertions.assertEquals(L_PATH + linkEntity.getShortLink(), link.getLink()),
                 () -> Assertions.assertEquals(linkEntity.getVisitsCount(), link.getCount()),
                 () -> Assertions.assertEquals(2L, link.getRank())
         );
@@ -95,12 +96,12 @@ public class StatisticsControllerTest extends AbstractTest {
         Assertions.assertAll(
                 () -> Assertions.assertEquals("https://github.com/qcha/JBook/blob/master/other/garbage_collector.md",
                         links.get(0).getOriginal()),
-                () -> Assertions.assertEquals("LNntW6HKp", links.get(0).getLink()),
+                () -> Assertions.assertEquals("/l/LNntW6HKp", links.get(0).getLink()),
                 () -> Assertions.assertEquals(11, links.get(0).getCount()),
                 () -> Assertions.assertEquals(1, links.get(0).getRank()),
 
                 () -> Assertions.assertEquals(linkEntity.getOriginalLink(), links.get(1).getOriginal()),
-                () -> Assertions.assertEquals(linkEntity.getShortLink(), links.get(1).getLink()),
+                () -> Assertions.assertEquals(L_PATH + linkEntity.getShortLink(), links.get(1).getLink()),
                 () -> Assertions.assertEquals(linkEntity.getVisitsCount(), links.get(1).getCount()),
                 () -> Assertions.assertEquals(2, links.get(1).getRank())
         );
@@ -124,24 +125,24 @@ public class StatisticsControllerTest extends AbstractTest {
 
                 () -> Assertions.assertEquals("https://github.com/qcha/JBook/blob/master/other/garbage_collector.md",
                         links.get(0).getOriginal()),
-                () -> Assertions.assertEquals("LNntW6HKp", links.get(0).getLink()),
+                () -> Assertions.assertEquals("/l/LNntW6HKp", links.get(0).getLink()),
                 () -> Assertions.assertEquals(11, links.get(0).getCount()),
                 () -> Assertions.assertEquals(1, links.get(0).getRank()),
 
                 () -> Assertions.assertEquals(linkEntity.getOriginalLink(), links.get(1).getOriginal()),
-                () -> Assertions.assertEquals(linkEntity.getShortLink(), links.get(1).getLink()),
+                () -> Assertions.assertEquals(L_PATH + linkEntity.getShortLink(), links.get(1).getLink()),
                 () -> Assertions.assertEquals(linkEntity.getVisitsCount(), links.get(1).getCount()),
                 () -> Assertions.assertEquals(2, links.get(1).getRank()),
 
                 () -> Assertions.assertEquals("https://stackoverflow.com/questions/38711871/load-different-application-yml-in-springboot-test",
                         links.get(2).getOriginal()),
-                () -> Assertions.assertEquals("5jDuNwTVe", links.get(2).getLink()),
+                () -> Assertions.assertEquals("/l/5jDuNwTVe", links.get(2).getLink()),
                 () -> Assertions.assertEquals(8, links.get(2).getCount()),
                 () -> Assertions.assertEquals(3, links.get(2).getRank()),
 
                 () -> Assertions.assertEquals("https://ru.wikipedia.org/wiki/SOLID_(%D0%BE%D0%B1%D1%8A%D0%B5%D0%BA%D1%82%D0%BD%D0%BE-%D0%BE%D1%80%D0%B8%D0%B5%D0%BD%D1%82%D0%B8%D1%80%D0%BE%D0%B2%D0%B0%D0%BD%D0%BD%D0%BE%D0%B5_%D0%BF%D1%80%D0%BE%D0%B3%D1%80%D0%B0%D0%BC%D0%BC%D0%B8%D1%80%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D0%B5)",
                         links.get(3).getOriginal()),
-                () -> Assertions.assertEquals("vJXU2MIK1", links.get(3).getLink()),
+                () -> Assertions.assertEquals("/l/vJXU2MIK1", links.get(3).getLink()),
                 () -> Assertions.assertEquals(4, links.get(3).getCount()),
                 () -> Assertions.assertEquals(4, links.get(3).getRank())
         );

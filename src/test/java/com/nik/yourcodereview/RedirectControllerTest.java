@@ -1,14 +1,9 @@
 package com.nik.yourcodereview;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.nik.yourcodereview.dao.LinkRepository;
 import com.nik.yourcodereview.model.dto.Error;
 import com.nik.yourcodereview.model.entity.LinkEntity;
 import org.junit.jupiter.api.*;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mock.web.MockHttpServletResponse;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.time.LocalDateTime;

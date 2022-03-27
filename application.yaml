@@ -1,5 +1,5 @@
 server:
-  port: 9000
+  port: 8080
   servlet:
     encoding:
       force: true
@@ -12,8 +12,8 @@ spring:
   datasource:
     driverClassName: org.postgresql.Driver
     url: "jdbc:postgresql://localhost:5432/link_storage"
-    username: "postgres"
-    password: "12345"
+    username: "****"
+    password: "****"
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQL10Dialect
     properties:

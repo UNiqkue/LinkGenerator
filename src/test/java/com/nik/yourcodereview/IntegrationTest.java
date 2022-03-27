@@ -12,6 +12,7 @@ import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import static com.nik.yourcodereview.builder.TestUtils.buildHttpHeaders;
+import static com.nik.yourcodereview.utils.UrlUtils.L_PATH;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 public class IntegrationTest extends AbstractTest {
@@ -31,35 +32,36 @@ public class IntegrationTest extends AbstractTest {
                 .andReturn().getResponse();
 
         ShortLink shortLink = objectMapper.readValue(responseGenerate.getContentAsString(), ShortLink.class);
-        Assertions.assertEquals("4lWInbfrj", shortLink.getLink());
+        String hashLink = "4lWInbfrj";
+        Assertions.assertEquals(L_PATH + hashLink, shortLink.getLink());
 
-        LinkEntity linkEntity = linkRepository.findById(shortLink.getLink()).orElseThrow();
+        LinkEntity linkEntity = linkRepository.findById(hashLink).orElseThrow();
         Assertions.assertAll(
                 () -> Assertions.assertEquals(linkPost.getOriginal(), linkEntity.getOriginalLink()),
-                () -> Assertions.assertEquals(shortLink.getLink(), linkEntity.getShortLink()),
+                () -> Assertions.assertEquals(hashLink, linkEntity.getShortLink()),
                 () -> Assertions.assertEquals(0L, linkEntity.getVisitsCount()),
                 () -> Assertions.assertNotNull(linkEntity.getCreateAt())
         );
 
         // GET /l - redirect
-        MockHttpServletResponse responseRedirect = mvc.perform(MockMvcRequestBuilders.get("/l/" + shortLink.getLink())
+        MockHttpServletResponse responseRedirect = mvc.perform(MockMvcRequestBuilders.get(L_PATH + hashLink)
                         .headers(buildHttpHeaders()))
                 .andExpect(status().is(302))
                 .andReturn().getResponse();
 
-        LinkEntity linkEntityActualRedirect = linkRepository.findById(shortLink.getLink()).orElseThrow();
+        LinkEntity linkEntityActualRedirect = linkRepository.findById(hashLink).orElseThrow();
         Assertions.assertAll(
                 "Проверка, что содержит нужный урл для редиректа и данные в Entity поменялись только для счётчика",
                 () -> Assertions.assertEquals(linkEntity.getOriginalLink(), responseRedirect.getRedirectedUrl()),
 
                 () -> Assertions.assertEquals(linkEntity.getOriginalLink(), linkEntityActualRedirect.getOriginalLink()),
-                () -> Assertions.assertEquals(linkEntity.getShortLink(), linkEntityActualRedirect.getShortLink()),
+                () -> Assertions.assertEquals(hashLink, linkEntityActualRedirect.getShortLink()),
                 () -> Assertions.assertEquals(linkEntity.getVisitsCount() + 1, linkEntityActualRedirect.getVisitsCount()),
                 () -> Assertions.assertNotNull(linkEntityActualRedirect.getCreateAt())
         );
 
         //GET /stats/:link
-        MockHttpServletResponse responseStatsByLink = mvc.perform(MockMvcRequestBuilders.get("/stats/" + shortLink.getLink())
+        MockHttpServletResponse responseStatsByLink = mvc.perform(MockMvcRequestBuilders.get("/stats/" + hashLink)
                         .headers(buildHttpHeaders()))
                 .andExpect(status().isOk())
                 .andReturn().getResponse();
@@ -68,7 +70,7 @@ public class IntegrationTest extends AbstractTest {
 
         Assertions.assertAll(
                 () -> Assertions.assertEquals(linkEntity.getOriginalLink(), link.getOriginal()),
-                () -> Assertions.assertEquals(linkEntity.getShortLink(), link.getLink()),
+                () -> Assertions.assertEquals(L_PATH + hashLink, link.getLink()),
                 () -> Assertions.assertEquals(linkEntityActualRedirect.getVisitsCount(), link.getCount()),
                 () -> Assertions.assertEquals(8L, link.getRank())
         );

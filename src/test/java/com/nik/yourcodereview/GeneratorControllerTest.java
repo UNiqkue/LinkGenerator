@@ -1,7 +1,5 @@
 package com.nik.yourcodereview;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.nik.yourcodereview.dao.LinkRepository;
 import com.nik.yourcodereview.model.dto.LinkPost;
 import com.nik.yourcodereview.model.dto.ShortLink;
 import com.nik.yourcodereview.model.entity.LinkEntity;
@@ -9,10 +7,8 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.mock.web.MockHttpServletResponse;
-import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.util.List;
@@ -37,15 +33,15 @@ public class GeneratorControllerTest extends AbstractTest {
                         .content(objectMapper.writeValueAsString(linkPost)).headers(buildHttpHeaders()))
                 .andExpect(status().is(200))
                 .andReturn().getResponse();
-
+        String linkHash = "VxnhdbulA";
         ShortLink shortLink = objectMapper.readValue(response.getContentAsString(), ShortLink.class);
-        Assertions.assertEquals("VxnhdbulA", shortLink.getLink());
+        Assertions.assertEquals("/l/" + linkHash, shortLink.getLink());
 
         List<LinkEntity> linkEntityList = linkRepository.findAll();
         Assertions.assertAll(
                 () -> Assertions.assertEquals(1, linkEntityList.size()),
                 () -> Assertions.assertEquals(linkPost.getOriginal(), linkEntityList.get(0).getOriginalLink()),
-                () -> Assertions.assertEquals(shortLink.getLink(), linkEntityList.get(0).getShortLink()),
+                () -> Assertions.assertEquals(linkHash, linkEntityList.get(0).getShortLink()),
                 () -> Assertions.assertEquals(0L, linkEntityList.get(0).getVisitsCount()),
                 () -> Assertions.assertNotNull(linkEntityList.get(0).getCreateAt())
         );
@@ -57,12 +53,12 @@ public class GeneratorControllerTest extends AbstractTest {
                 .andReturn().getResponse();
 
         ShortLink shortLink2 = objectMapper.readValue(response2.getContentAsString(), ShortLink.class);
-        Assertions.assertEquals("VxnhdbulA", shortLink2.getLink());
+        Assertions.assertEquals("/l/" + linkHash, shortLink2.getLink());
         List<LinkEntity> linkEntityList2 = linkRepository.findAll();
         Assertions.assertAll(
                 () -> Assertions.assertEquals(1, linkEntityList2.size()),
                 () -> Assertions.assertEquals(linkPost.getOriginal(), linkEntityList2.get(0).getOriginalLink()),
-                () -> Assertions.assertEquals(shortLink.getLink(), linkEntityList2.get(0).getShortLink()),
+                () -> Assertions.assertEquals(linkHash, linkEntityList2.get(0).getShortLink()),
                 () -> Assertions.assertEquals(0L, linkEntityList2.get(0).getVisitsCount()),
                 () -> Assertions.assertNotNull(linkEntityList2.get(0).getCreateAt())
         );
