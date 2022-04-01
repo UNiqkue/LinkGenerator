@@ -12,7 +12,7 @@ import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import static com.nik.yourcodereview.builder.TestUtils.buildHttpHeaders;
-import static com.nik.yourcodereview.utils.UrlUtils.L_PATH;
+import static com.nik.yourcodereview.utils.UrlUtils.REDIRECT_L_PATH;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 public class IntegrationTest extends AbstractTest {
@@ -33,7 +33,7 @@ public class IntegrationTest extends AbstractTest {
 
         ShortLink shortLink = objectMapper.readValue(responseGenerate.getContentAsString(), ShortLink.class);
         String hashLink = "4lWInbfrj";
-        Assertions.assertEquals(L_PATH + hashLink, shortLink.getLink());
+        Assertions.assertEquals(REDIRECT_L_PATH + hashLink, shortLink.getLink());
 
         LinkEntity linkEntity = linkRepository.findById(hashLink).orElseThrow();
         Assertions.assertAll(
@@ -44,7 +44,7 @@ public class IntegrationTest extends AbstractTest {
         );
 
         // GET /l - redirect
-        MockHttpServletResponse responseRedirect = mvc.perform(MockMvcRequestBuilders.get(L_PATH + hashLink)
+        MockHttpServletResponse responseRedirect = mvc.perform(MockMvcRequestBuilders.get(REDIRECT_L_PATH + hashLink)
                         .headers(buildHttpHeaders()))
                 .andExpect(status().is(302))
                 .andReturn().getResponse();
@@ -70,7 +70,7 @@ public class IntegrationTest extends AbstractTest {
 
         Assertions.assertAll(
                 () -> Assertions.assertEquals(linkEntity.getOriginalLink(), link.getOriginal()),
-                () -> Assertions.assertEquals(L_PATH + hashLink, link.getLink()),
+                () -> Assertions.assertEquals(REDIRECT_L_PATH + hashLink, link.getLink()),
                 () -> Assertions.assertEquals(linkEntityActualRedirect.getVisitsCount(), link.getCount()),
                 () -> Assertions.assertEquals(8L, link.getRank())
         );

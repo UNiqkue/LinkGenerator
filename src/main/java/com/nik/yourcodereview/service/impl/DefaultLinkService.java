@@ -61,7 +61,12 @@ public class DefaultLinkService implements LinkService, StatisticService {
 
     @Override
     public List<LinkBO> getLinksByPageParameters(Integer page, Integer count) {
-        AtomicLong rankIncrementor = new AtomicLong(ONE_INCREMENT_VALUE);
+        AtomicLong rankIncrementor;
+        if (ONE_INCREMENT_VALUE.equals(Long.valueOf(count))) {
+            rankIncrementor = new AtomicLong(page);
+        } else {
+            rankIncrementor = new AtomicLong((page - ONE_INCREMENT_VALUE) * count + ONE_INCREMENT_VALUE);
+        }
         return linkRepository
                 .findAll(PageRequest.of(page - 1, count, Sort.by("visitsCount").descending()))
                 .stream()

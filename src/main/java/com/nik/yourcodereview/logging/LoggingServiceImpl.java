@@ -16,33 +16,32 @@ public class LoggingServiceImpl implements LoggingService {
 
     @Override
     public void logRequest(HttpServletRequest httpServletRequest, Object body) {
-        StringBuilder stringBuilder = new StringBuilder();
+
         Map<String, String> parameters = buildParametersMap(httpServletRequest);
 
-        stringBuilder.append("REQUEST ").append(httpServletRequest.getMethod()).append(" ").append(httpServletRequest.getRequestURI()).append("\n");
-        stringBuilder.append("headers=[").append(buildHeadersMap(httpServletRequest)).append("]");
+        String requestLog = "REQUEST " + httpServletRequest.getMethod() + " " + httpServletRequest.getRequestURI() + "\n" +
+                "headers=[" + buildHeadersMap(httpServletRequest) + "]";
 
         if (!parameters.isEmpty()) {
-            stringBuilder.append("\n").append("parameters=[").append(parameters).append("]");
+            requestLog += "\n" + "parameters=[" + parameters + "]";
         }
 
         if (body != null) {
-            stringBuilder.append("\n").append("body=[").append(body).append("]");
+            requestLog += "\n" + "body=[" + body + "]";
         }
 
-        log.info(stringBuilder.toString());
+        log.info(requestLog);
     }
 
     @Override
     public void logResponse(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object body) {
-        StringBuilder stringBuilder = new StringBuilder();
 
-        stringBuilder.append("RESPONSE ").append(httpServletRequest.getMethod()).append(httpServletRequest.getRequestURI()).append("\n");
-        stringBuilder.append("responseHeaders=[").append(buildHeadersMap(httpServletResponse)).append("]").append("\n");
-        stringBuilder.append("status=").append(httpServletResponse.getStatus()).append("\n");
-        stringBuilder.append("responseBody=[").append(body).append("]");
+        String stringBuilder = "RESPONSE " + httpServletRequest.getMethod() + httpServletRequest.getRequestURI() + "\n" +
+                "responseHeaders=[" + buildHeadersMap(httpServletResponse) + "]" + "\n" +
+                "status=" + httpServletResponse.getStatus() + "\n" +
+                "responseBody=[" + body + "]";
 
-        log.info(stringBuilder.toString());
+        log.info(stringBuilder);
     }
 
     private Map<String, String> buildParametersMap(HttpServletRequest httpServletRequest) {

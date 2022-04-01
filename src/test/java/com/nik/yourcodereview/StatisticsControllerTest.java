@@ -17,7 +17,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import static com.nik.yourcodereview.builder.TestUtils.buildHttpHeaders;
-import static com.nik.yourcodereview.utils.UrlUtils.L_PATH;
+import static com.nik.yourcodereview.utils.UrlUtils.REDIRECT_L_PATH;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 public class StatisticsControllerTest extends AbstractTest {
@@ -61,7 +61,7 @@ public class StatisticsControllerTest extends AbstractTest {
 
         Assertions.assertAll(
                 () -> Assertions.assertEquals(linkEntity.getOriginalLink(), link.getOriginal()),
-                () -> Assertions.assertEquals(L_PATH + linkEntity.getShortLink(), link.getLink()),
+                () -> Assertions.assertEquals(REDIRECT_L_PATH + linkEntity.getShortLink(), link.getLink()),
                 () -> Assertions.assertEquals(linkEntity.getVisitsCount(), link.getCount()),
                 () -> Assertions.assertEquals(2L, link.getRank())
         );
@@ -101,7 +101,7 @@ public class StatisticsControllerTest extends AbstractTest {
                 () -> Assertions.assertEquals(1, links.get(0).getRank()),
 
                 () -> Assertions.assertEquals(linkEntity.getOriginalLink(), links.get(1).getOriginal()),
-                () -> Assertions.assertEquals(L_PATH + linkEntity.getShortLink(), links.get(1).getLink()),
+                () -> Assertions.assertEquals(REDIRECT_L_PATH + linkEntity.getShortLink(), links.get(1).getLink()),
                 () -> Assertions.assertEquals(linkEntity.getVisitsCount(), links.get(1).getCount()),
                 () -> Assertions.assertEquals(2, links.get(1).getRank())
         );
@@ -109,7 +109,7 @@ public class StatisticsControllerTest extends AbstractTest {
 
     @Test
     @Sql("/sql/insert_links.sql")
-    @DisplayName("Get statistic about links")
+    @DisplayName("Get statistic about links page=1 and count=4")
     public void getStatisticsTest() throws Exception {
         MockHttpServletResponse response = mvc.perform(MockMvcRequestBuilders.get(UriComponentsBuilder.fromPath("/stats")
                                 .queryParam("page", 1)
@@ -130,7 +130,7 @@ public class StatisticsControllerTest extends AbstractTest {
                 () -> Assertions.assertEquals(1, links.get(0).getRank()),
 
                 () -> Assertions.assertEquals(linkEntity.getOriginalLink(), links.get(1).getOriginal()),
-                () -> Assertions.assertEquals(L_PATH + linkEntity.getShortLink(), links.get(1).getLink()),
+                () -> Assertions.assertEquals(REDIRECT_L_PATH + linkEntity.getShortLink(), links.get(1).getLink()),
                 () -> Assertions.assertEquals(linkEntity.getVisitsCount(), links.get(1).getCount()),
                 () -> Assertions.assertEquals(2, links.get(1).getRank()),
 
@@ -143,8 +143,110 @@ public class StatisticsControllerTest extends AbstractTest {
                 () -> Assertions.assertEquals("https://ru.wikipedia.org/wiki/SOLID_(%D0%BE%D0%B1%D1%8A%D0%B5%D0%BA%D1%82%D0%BD%D0%BE-%D0%BE%D1%80%D0%B8%D0%B5%D0%BD%D1%82%D0%B8%D1%80%D0%BE%D0%B2%D0%B0%D0%BD%D0%BD%D0%BE%D0%B5_%D0%BF%D1%80%D0%BE%D0%B3%D1%80%D0%B0%D0%BC%D0%BC%D0%B8%D1%80%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D0%B5)",
                         links.get(3).getOriginal()),
                 () -> Assertions.assertEquals("/l/vJXU2MIK1", links.get(3).getLink()),
-                () -> Assertions.assertEquals(4, links.get(3).getCount()),
+                () -> Assertions.assertEquals(5, links.get(3).getCount()),
                 () -> Assertions.assertEquals(4, links.get(3).getRank())
+        );
+    }
+
+
+    @Test
+    @Sql("/sql/insert_links.sql")
+    @DisplayName("Get statistic about links page=1 and count=1")
+    public void getStatisticsFirstPageAndOneCountTest() throws Exception {
+        MockHttpServletResponse response = mvc.perform(MockMvcRequestBuilders.get(UriComponentsBuilder.fromPath("/stats")
+                                .queryParam("page", 1)
+                                .queryParam("count", 1).toUriString())
+                        .headers(buildHttpHeaders()))
+                .andExpect(status().isOk())
+                .andReturn().getResponse();
+
+        List<Link> links = objectMapper.readValue(response.getContentAsString(), objectMapper.getTypeFactory().constructCollectionType(List.class, Link.class));
+
+        Assertions.assertAll(
+                () -> Assertions.assertEquals(1, links.size()),
+
+                () -> Assertions.assertEquals("https://github.com/qcha/JBook/blob/master/other/garbage_collector.md",
+                        links.get(0).getOriginal()),
+                () -> Assertions.assertEquals("/l/LNntW6HKp", links.get(0).getLink()),
+                () -> Assertions.assertEquals(11, links.get(0).getCount()),
+                () -> Assertions.assertEquals(1, links.get(0).getRank())
+        );
+    }
+
+    @Test
+    @Sql("/sql/insert_links.sql")
+    @DisplayName("Get statistic about links page=2 and count=7")
+    public void getStatisticsSecondPageTest() throws Exception {
+        MockHttpServletResponse response = mvc.perform(MockMvcRequestBuilders.get(UriComponentsBuilder.fromPath("/stats")
+                                .queryParam("page", 2)
+                                .queryParam("count", 7).toUriString())
+                        .headers(buildHttpHeaders()))
+                .andExpect(status().isOk())
+                .andReturn().getResponse();
+
+        List<Link> links = objectMapper.readValue(response.getContentAsString(), objectMapper.getTypeFactory().constructCollectionType(List.class, Link.class));
+
+        Assertions.assertAll(
+                () -> Assertions.assertEquals(2, links.size()),
+
+                () -> Assertions.assertEquals("https://www.vcv.me/ru",
+                        links.get(0).getOriginal()),
+                () -> Assertions.assertEquals("/l/aonfGjtKG", links.get(0).getLink()),
+                () -> Assertions.assertEquals(1, links.get(0).getCount()),
+                () -> Assertions.assertEquals(8, links.get(0).getRank()),
+
+                () -> Assertions.assertEquals("https://yandex.by/images/search?rpt=simage&noreask=1&source=qa&text=Java%20Virtual%20Machine&stype=image&lr=157", links.get(1).getOriginal()),
+                () -> Assertions.assertEquals(REDIRECT_L_PATH + "780ik0Ib3", links.get(1).getLink()),
+                () -> Assertions.assertEquals(0, links.get(1).getCount()),
+                () -> Assertions.assertEquals(9, links.get(1).getRank())
+        );
+    }
+
+    @Test
+    @Sql("/sql/insert_links.sql")
+    @DisplayName("Get statistic about links page=3 and count=4")
+    public void getStatisticsThirdPageTest() throws Exception {
+        MockHttpServletResponse response = mvc.perform(MockMvcRequestBuilders.get(UriComponentsBuilder.fromPath("/stats")
+                                .queryParam("page", 3)
+                                .queryParam("count", 4).toUriString())
+                        .headers(buildHttpHeaders()))
+                .andExpect(status().isOk())
+                .andReturn().getResponse();
+
+        List<Link> links = objectMapper.readValue(response.getContentAsString(), objectMapper.getTypeFactory().constructCollectionType(List.class, Link.class));
+
+        Assertions.assertAll(
+                () -> Assertions.assertEquals(1, links.size()),
+
+                () -> Assertions.assertEquals("https://yandex.by/images/search?rpt=simage&noreask=1&source=qa&text=Java%20Virtual%20Machine&stype=image&lr=157",
+                        links.get(0).getOriginal()),
+                () -> Assertions.assertEquals(REDIRECT_L_PATH + "780ik0Ib3", links.get(0).getLink()),
+                () -> Assertions.assertEquals(0, links.get(0).getCount()),
+                () -> Assertions.assertEquals(9, links.get(0).getRank())
+        );
+    }
+
+    @Test
+    @Sql("/sql/insert_links.sql")
+    @DisplayName("Get statistic about links page=9 and count=1")
+    public void getStatisticsNinePageAndOneCountTest() throws Exception {
+        MockHttpServletResponse response = mvc.perform(MockMvcRequestBuilders.get(UriComponentsBuilder.fromPath("/stats")
+                                .queryParam("page", 9)
+                                .queryParam("count", 1).toUriString())
+                        .headers(buildHttpHeaders()))
+                .andExpect(status().isOk())
+                .andReturn().getResponse();
+
+        List<Link> links = objectMapper.readValue(response.getContentAsString(), objectMapper.getTypeFactory().constructCollectionType(List.class, Link.class));
+
+        Assertions.assertAll(
+                () -> Assertions.assertEquals(1, links.size()),
+
+                () -> Assertions.assertEquals("https://yandex.by/images/search?rpt=simage&noreask=1&source=qa&text=Java%20Virtual%20Machine&stype=image&lr=157",
+                        links.get(0).getOriginal()),
+                () -> Assertions.assertEquals(REDIRECT_L_PATH + "780ik0Ib3", links.get(0).getLink()),
+                () -> Assertions.assertEquals(0, links.get(0).getCount()),
+                () -> Assertions.assertEquals(9, links.get(0).getRank())
         );
     }
 

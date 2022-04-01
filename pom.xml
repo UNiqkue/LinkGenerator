@@ -81,6 +81,15 @@
     </dependencies>
 
     <build>
+        <resources>
+            <resource>
+                <directory>properties</directory>
+                <filtering>true</filtering>
+                <includes>
+                    <include>*.yaml</include>
+                </includes>
+            </resource>
+        </resources>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

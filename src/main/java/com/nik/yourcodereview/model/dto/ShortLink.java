@@ -17,7 +17,7 @@ public class ShortLink {
     }
 
     /**
-     * given link link
+     * unique link
      *
      * @return link
      */
