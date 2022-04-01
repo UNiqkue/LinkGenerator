@@ -13,7 +13,9 @@
 
 Используется JDK 11.  
 Postgre DB.  
-все настройки в application.yaml - spring.datasource. Файл application-test.yaml используется для тестов (внутри папки resources не обнаруживает) - реализована h2.
+все настройки в application.yaml - spring.datasource.   
+Файл application-test.yaml используется для тестов - реализована h2.
+Находятся в пакете resources.
 
 Необходимо вызвать команду
 

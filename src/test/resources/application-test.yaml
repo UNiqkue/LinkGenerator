@@ -1,3 +1,10 @@
+server:
+  servlet:
+    encoding:
+      force: true
+      enabled: true
+      charset: UTF-8
+
 spring:
   # for tests
   datasource:
